@@ -2,8 +2,8 @@
 # 2016/8/29 20:12
 """
 -------------------------------------------------------------------------------
-Function:
-Version:    1.0
+Function:   用于发送短信
+Version:    1.1
 Author:     SLY
 Contact:    slysly759@gmail.com 
  
@@ -48,7 +48,7 @@ if __name__=='__main__':
         print(today_time)
         time.sleep(1)
         #每天早上7.00发送短信提示
-        if today_time[0]=='13' and today_time[1]=='16' and today_time[2]=='00':
+        if today_time[0]=='07' and today_time[1]=='00' and today_time[2]=='00':
             content=crawl_spider().main()
             sms_send().start_request(content)
             print('send weather sms successfully')
