@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Change your header to json</title>
+     <!--新 Bootstrap 核心 CSS 文件-->
+<link rel="stylesheet" href="styles/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="styles/bootstrap-theme.min.css">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="scripts/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="scripts/bootstrap.min.js"></script>
+<!-- 最新的 站长工具网站的js -->
+<!-- 这个傻吊网站的样式好像是自己写的，带版本化管理。。。不想本地化了。。。 -->
+
+<!--<script type="text/javascript" src="http://tool.chinaz.com/template/default/js/public/mobilepage.js?v=201607"></script>-->
+
+<link rel="stylesheet" type="text/css" href="styles/all-base.css?v=201607">
+
+<link rel="stylesheet" type="text/css" href="styles/publicstyle.css?v=201607">
+
+<script type="text/javascript" src="scripts/jq-public.js?v=201608"></script>
+
+<link rel="stylesheet" href="styles/toolstyle.css" type="text/css"/>
+
+<script type="text/javascript" src="scripts/change.js"></script>
+<!--<script type="application/javascript">-->
+
+
+    <!--function Change() {-->
+        <!--var left = document.getElementById('header').value;-->
+
+        <!--var right_dom = document.getElementById('json');-->
+
+        <!--var right_notice=document.getElementById('notice_back');-->
+
+        <!--var middle_bottle;-->
+        <!--var middle_branch;-->
+        <!--var middle_little_branch,middle_dirt_branch;-->
+
+        <!--var new_right_value='';-->
+        <!--if (left.indexOf(":")!==-1) {-->
+<!--//            alert('符合标准');-->
+            <!--middle_bottle=left.split('\n');-->
+            <!--console.log(middle_bottle);-->
+            <!--for (middle_branch in middle_bottle){-->
+                <!--if (middle_bottle.hasOwnProperty(middle_branch)){-->
+                    <!--middle_little_branch=middle_bottle[middle_branch].split(':');-->
+                    <!--console.log(middle_little_branch);-->
+                    <!--for (middle_dirt_branch in middle_little_branch){-->
+                        <!--if (middle_little_branch.hasOwnProperty(middle_dirt_branch)) {-->
+                            <!--console.log(middle_dirt_branch);-->
+                            <!--if (middle_dirt_branch==0){-->
+                                <!--new_right_value=new_right_value+'"'+middle_little_branch[middle_dirt_branch]+'"'+':'-->
+                            <!--}else{-->
+                                <!--new_right_value=new_right_value+'"'+middle_little_branch[middle_dirt_branch]+'"'+','-->
+                            <!--}-->
+
+                        <!--}-->
+
+                    <!--}-->
+                <!--}-->
+
+
+            <!--}-->
+            <!--console.log(new_right_value);-->
+<!--//            new_right_value=new_right_value.-->
+            <!--right_dom.value = '{'+new_right_value.substring(0,new_right_value.length-1)+'}';-->
+<!--//            alert(left)-->
+        <!--}else{-->
+            <!--alert('不符合标准');-->
+            <!--right_dom.value = "fuck you";-->
+        <!--}-->
+<!--//        right_dom.value = left;-->
+<!--//将右侧提示不显示-->
+        <!--right_notice.style='display:none;';-->
+    <!--}-->
+
+<!--</script>-->
+
+</head>
+
+<body>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<h2 class="text-center">
+				Header转Json小工具
+			</h2>
+		</div>
+	</div>
+</div>
+
+
+<div class="wrapper pt20 pb20">
+    <div class="CodingWrap auto">
+    <!--<form action="/tools/urlcrypt.aspx" method="post">-->
+        <!--CodChange-begin-->
+        <div class="CodChangeWrap clearfix">
+        	<div class="CodChangLeft fl pr"><textarea class="CodchaLtxt bor-a1s h215 WrapHid" id="header" name="header"></textarea> <b class="search-hint CentHid">请把你需要转换的请求头粘贴在这里</b></div>
+              <div class="CodChangCent fl clearfix">
+              	<div class="CodCBtnWrap w160 h215"><button type="button"  class="GBtn GLOkBtn" onclick="Change()">Header转换</button></div>
+              </div>
+              <div class="CodChangRight fl pr"><textarea class="CodchaLtxt bor-a1s h215 WrapHid" id="json" name="json"></textarea> <b class="search-hint CentHid" id="notice_back">还原后的结果</b></div>
+		</div>
+        <!--CodChange-end-->
+             <!--</form>-->
+    </div>
+</div>
+
+    <div class="wrapper mt10">
+<div id="centerTxt"></div>
+<div class="ToolsWrap" id="centerImg"></div>
+         <div class="ToolAbout wrapper03">
+    <div class="clearfix"><h4 class="HeadH4 YaHei fz16 col-blue02 fwnone fl">工具简介</h4>
+        <div class="fr fz14" id="toolsIntro">
+
+        </div>
+     </div>
+    <div class="col-gray01 ToolAbCont"><p>本工具将浏览器的header即请求头转换为适合Python请求的dict或者json格式。</p> </div>
+    </div>
+        </div>
+
+</body>
+
+</html>
