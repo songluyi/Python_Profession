@@ -9,5 +9,9 @@ Contact:    slysly759@gmail.com
  
 -------------------------------------------------------------------------------
 """
-s=['1'].extend(['2','3'])
-print(s)
+a=['abcd']
+b=['sss','ssssss']
+print(a)
+print(b)
+a.extend(b)
+print(a)
