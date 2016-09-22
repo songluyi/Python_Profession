@@ -16,9 +16,11 @@ import pymysql
 from configparser import ConfigParser
 class proxy_spider(object):
     def __init__(self):
+        #可以在下方加入自己想要新增的代理IP页面
         self.row_url={
             '快代理':['http://www.kuaidaili.com/proxylist/'],
-            '西刺代理':['http://www.xicidaili.com/nn/','http://www.xicidaili.com/nt/']
+            '西刺代理':['http://www.xicidaili.com/nn/','http://www.xicidaili.com/nt/',
+                    'http://www.xicidaili.com/wn/','http://www.xicidaili.com/wt/']
         }
         self.db_setting=self.read_config()
         self.header_xici={"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -47,14 +49,14 @@ class proxy_spider(object):
     def form_url(self,row_url):
         new_list=[]
         for i in row_url:
-            url_list=list(map(lambda x:i+str(x),range(1,11)))
+            url_list=list(map(lambda x:i+str(x),range(1,21)))
             new_list.extend(url_list)
         return new_list
 
     def get_source(self,url):
         if 'kuaidaili'in url:
-            print('这是快代理的url，正在改用其header')
-            html=requests.get(url,header=self.header_kuai).text
+            print('正在爬取快代理的url:'+url)
+            html=requests.get(url,headers=self.header_kuai).text
             new_html=etree.HTML(html)
             new_data=[]
             data=new_html.xpath('//*[@id="index_free_list"]/table/tbody/tr/td')
@@ -63,11 +65,22 @@ class proxy_spider(object):
             for i in range(count):
                 new_data.append(change_data[i*8:(i+1)*8])
             return new_data
-
-
-
-
-
+        if 'xicidaili' in url:
+            print('正在爬取西刺代理的url:'+url)
+            html=requests.get(url,headers=self.header_xici).text
+            new_html=etree.HTML(html)
+            new_data=[]
+            data_even=new_html.xpath('//tr[@class=""]')
+            data_odd=new_html.xpath('//tr[@class="odd"]')
+            for i in data_even:
+                detail_data=i.xpath("./td/text()")
+                new_data.append([detail_data[0],detail_data[1],detail_data[4],detail_data[5],detail_data[10]])
+            for j in data_odd:
+                detail_data=j.xpath("./td/text()")
+                #分别对应的是IP PORT HIDE TYPE VALID TIME
+                new_data.append([detail_data[0],detail_data[1],detail_data[4],detail_data[5],detail_data[10]])
+            return new_data
+        #如果加入了任何自己的代理可以在下面加入if判断
         return
 
     def url_check_valid(self,row_url):
@@ -82,11 +95,10 @@ class proxy_spider(object):
             else:
                 print("url is not a standard one, please check your url contains 'http' and last bytes is '/' ")
         return
-
+        #支持拓展mysql数据的插入
     def check_db_valid(self):
         try:
             db = pymysql.connect(self.db_setting[0][1],self.db_setting[1][1],self.db_setting[2][1],self.db_setting[3][1],port=int(self.db_setting[4][1]),charset=self.db_setting[5][1])
-            db.commit()
             return 'success'
         except Exception:
             return 'failed'
@@ -103,3 +115,5 @@ if __name__=='__main__':
     row_url_1=fuck_proxy.row_url['西刺代理']
     url_list_0=fuck_proxy.form_url(row_url_0)
     url_list_1=fuck_proxy.form_url(row_url_1)
+    kuai_proxy_list=list(map(fuck_proxy.get_source,url_list_0))
+    huaci_proxy_list=list(map(fuck_proxy.get_source,url_list_1))
