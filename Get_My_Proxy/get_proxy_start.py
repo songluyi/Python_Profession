@@ -12,12 +12,15 @@ Contact:    slysly759@gmail.com
 
 import requests
 from lxml import etree
+import pymysql
+from configparser import ConfigParser
 class proxy_spider(object):
     def __init__(self):
         self.row_url={
             '快代理':['http://www.kuaidaili.com/proxylist/'],
             '西刺代理':['http://www.xicidaili.com/nn/','http://www.xicidaili.com/nt/']
         }
+        self.db_setting=self.read_config()
         self.header_xici={"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
                      "Accept-Encoding":"gzip, deflate, sdch",
                      "Accept-Language":"zh-CN,zh;q=0.8,en;q=0.6",
@@ -33,9 +36,11 @@ class proxy_spider(object):
         self.header_kuai={"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
                           "Accept-Encoding":"gzip, deflate, sdch",
                           "Accept-Language":"zh-CN,zh;q=0.8,en;q=0.6",
-                          "Cache-Control":"max-age=0","Connection":"keep-alive",
+                          "Cache-Control":"max-age=0",
+                          "Connection":"keep-alive",
                           "Cookie":"channelid=0; sid=1474442634155791; _ga=GA1.2.1358484058.1466123771; Hm_lvt_7ed65b1cc4b810e9fd37959c9bb51b31=1474275937,1474275941,1474283360,1474443234; Hm_lpvt_7ed65b1cc4b810e9fd37959c9bb51b31=1474443252",
-                          "DNT":"1","Host":"www.kuaidaili.com",
+                          "DNT":"1",
+                          "Host":"www.kuaidaili.com",
                           "Referer":"http//www.kuaidaili.com/proxylist/2/",
                           "Upgrade-Insecure-Requests":"1",
                           "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"}
@@ -51,14 +56,45 @@ class proxy_spider(object):
             print('这是快代理的url，正在改用其header')
             html=requests.get(url,header=self.header_kuai).text
             new_html=etree.HTML(html)
+            new_data=[]
+            data=new_html.xpath('//*[@id="index_free_list"]/table/tbody/tr/td')
+            change_data=list(map(lambda x:x.text,data))
+            count=int(len(data) /8)
+            for i in range(count):
+                new_data.append(change_data[i*8:(i+1)*8])
+            return new_data
+
+
+
 
 
         return
 
-    def url_check_valid(self,url,header):
+    def url_check_valid(self,row_url):
+        for proxy_name,proxy_url in row_url.iteritems():
+            if 'http' in row_url[proxy_name][0] and row_url[proxy_name][0][-1]=='/':
+                try:
+                    self.get_source(row_url[proxy_name][0])
+
+                except Exception:
+                    print('This url may not be connected, please check your network status or header setting')
+                    raise Exception
+            else:
+                print("url is not a standard one, please check your url contains 'http' and last bytes is '/' ")
         return
 
+    def check_db_valid(self):
+        try:
+            db = pymysql.connect(self.db_setting[0][1],self.db_setting[1][1],self.db_setting[2][1],self.db_setting[3][1],port=int(self.db_setting[4][1]),charset=self.db_setting[5][1])
+            db.commit()
+            return 'success'
+        except Exception:
+            return 'failed'
 
+    def read_config(self):
+        cfg = ConfigParser()
+        cfg.read('config.ini')
+        return cfg.items(cfg.sections()[0])
 
 if __name__=='__main__':
     fuck_proxy=proxy_spider()
