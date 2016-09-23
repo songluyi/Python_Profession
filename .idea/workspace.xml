@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eac00500-a555-4585-a268-c3b8f436a822" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Get_My_Proxy/code.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/getProxy" afterPath="$PROJECT_DIR$/getProxy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/getProxy/proxy.db" afterPath="$PROJECT_DIR$/getProxy/proxy.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Get_My_Proxy/get_proxy_start.py" afterPath="$PROJECT_DIR$/Get_My_Proxy/get_proxy_start.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/getProxy/main.py" afterPath="$PROJECT_DIR$/getProxy/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Get_My_Proxy/test.py" afterPath="$PROJECT_DIR$/Get_My_Proxy/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Python_Profession.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -120,8 +114,8 @@
       <file leaf-file-name="readme.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pytesser3/readme.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5516224" vertical-offset="117" max-vertical-offset="456">
-              <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="456">
+              <caret line="0" column="1" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -586,7 +580,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1372" height="728" extended-state="0" />
+    <frame x="-8" y="0" width="1372" height="728" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -982,8 +976,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pytesser3/readme.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5516224" vertical-offset="117" max-vertical-offset="456">
-          <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="456">
+          <caret line="0" column="1" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="10" />
           <folding />
         </state>
       </provider>
