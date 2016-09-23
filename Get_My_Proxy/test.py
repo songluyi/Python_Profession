@@ -9,6 +9,7 @@ Contact:    slysly759@gmail.com
  
 -------------------------------------------------------------------------------
 """
+
 # import requests
 # import urllib.request
 # from lxml import etree
@@ -42,5 +43,3 @@ Contact:    slysly759@gmail.com
 
 # a=('ip', 'localhost')
 # print(a[1])
-
-print(dir(list))
