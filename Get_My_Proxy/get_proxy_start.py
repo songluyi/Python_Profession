@@ -2,19 +2,19 @@
 # 2016/9/19 19:36
 """
 -------------------------------------------------------------------------------
-Function:
+Function:   从三家网站获取代理并检测
 Version:    1.0
 Author:     SLY
 Contact:    slysly759@gmail.com 
  
 -------------------------------------------------------------------------------
 """
-
 import requests
 from lxml import etree
 import pymysql
 from configparser import ConfigParser
 from PIL import Image
+import pytesser3   #这个是我自己写的一个 已经上传pypi 大家可以下载来试一下
 try:
     from pytesser import image_to_string
 except:
@@ -139,7 +139,27 @@ class proxy_spider(object):
         img = Image.open('newcode.jpg')
         vcode =image_to_string(img)
         return vcode
+    def isAlive(self,ip,port,header):
+        proxy={'http':'http://'+ip+':'+port}
+        print(proxy)
 
+        #使用这个方式是全局方法。
+        #使用代理访问腾讯官网，进行验证代理是否有效
+        test_url="http://www.songluyi.com"
+        req=urllib2.Request(test_url,headers=header)
+        try:
+            #timeout 设置为10，如果你不能忍受你的代理延时超过10，就修改timeout的数字
+            resp=urllib2.urlopen(req,timeout=10)
+
+            if resp.code==200:
+                print("work")
+                return True
+            else:
+                print("not work")
+                return False
+        except :
+            print("Not work")
+            return False
 if __name__=='__main__':
     fuck_proxy=proxy_spider()
     new_list=[]

@@ -10,7 +10,7 @@ Contact:    slysly759@gmail.com
 -------------------------------------------------------------------------------
 """
 
-from pytesser3 import image_to_string
+from pytesser import image_to_string
 from PIL import Image
 import requests
 def get_code():
