@@ -140,13 +140,13 @@ class proxy_spider(object):
         vcode =image_to_string(img)
         return vcode
     def isAlive(self,ip,port,header):
-        proxy={'http':'http://'+ip+':'+port}
+        proxy={'http':'http://'+ip+':'+port,'https:':'https://'+ip+':'+port}
         print(proxy)
 
         #使用这个方式是全局方法。
         #使用代理访问腾讯官网，进行验证代理是否有效
         test_url="http://www.songluyi.com"
-        req=urllib2.Request(test_url,headers=header)
+        req=requests.get(test_url,headers=header,proxy=proxy)
         try:
             #timeout 设置为10，如果你不能忍受你的代理延时超过10，就修改timeout的数字
             resp=urllib2.urlopen(req,timeout=10)
