@@ -2,13 +2,14 @@
 # 2016/9/19 19:36
 """
 -------------------------------------------------------------------------------
-Function:   从三家网站获取代理并检测
-Version:    1.0
+Function:   从多家代理网站获取代理并检测
+Version:    1.1
 Author:     SLY
 Contact:    slysly759@gmail.com 
  
 -------------------------------------------------------------------------------
 """
+
 import requests
 from lxml import etree
 import pymysql
@@ -25,7 +26,8 @@ class proxy_spider(object):
         self.row_url={
             '快代理':['http://www.kuaidaili.com/proxylist/'],
             '西刺代理':['http://www.xicidaili.com/nn/','http://www.xicidaili.com/nt/',
-                    'http://www.xicidaili.com/wn/','http://www.xicidaili.com/wt/']
+                    'http://www.xicidaili.com/wn/','http://www.xicidaili.com/wt/'],
+            '站大爷':['http://ip.zdaye.com/']#这个比较特殊
         }
         self.db_setting=self.read_config()
         self.header_xici={"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -51,10 +53,20 @@ class proxy_spider(object):
                           "Referer":"http//www.kuaidaili.com/proxylist/2/",
                           "Upgrade-Insecure-Requests":"1",
                           "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"}
+        self.header_daye={"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                          "Accept-Encoding":"gzip, deflate, sdch",
+                          "Accept-Language":"zh-CN,zh;q=0.8,en;q=0.6",
+                          "Cache-Control":"max-age=0",
+                          "Connection":"keep-alive",
+                          "Cookie":"ASPSESSIONIDSQTSCCDB=LPKDFCOAPPGMEJBGDGLKLGIM; ASPSESSIONIDSABBTDDB=ALFHNFOAKCPCGCIAIPGDHFCN; ASPSESSIONIDQCCBTDDB=PACIODPAACFHFJLLHMABEJFN; AJSTAT_ok_pages=1; AJSTAT_ok_times=4; Hm_lvt_8fd158bb3e69c43ab5dd05882cf0b234=1474939866,1474939872,1474939882,1474940198; Hm_lpvt_8fd158bb3e69c43ab5dd05882cf0b234=1474948132",
+                          "DNT":"1",
+                          "Host":"ip.zdaye.com",
+                          "Upgrade-Insecure-Requests":"1",
+                          "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"}
     def form_url(self,row_url):
         new_list=[]
         for i in row_url:
-            url_list=list(map(lambda x:i+str(x),range(1,21)))
+            url_list=list(map(lambda x: i+str(x), range(1, 21)))
             new_list.extend(url_list)
         return new_list
 
@@ -72,25 +84,40 @@ class proxy_spider(object):
             return new_data
         if 'xicidaili' in url:
             print('正在爬取西刺代理的url:'+url)
-            html=requests.get(url,headers=self.header_xici).text
+            html=requests.get(url, headers=self.header_xici).text
             new_html=etree.HTML(html)
             new_data=[]
             data_even=new_html.xpath('//tr[@class=""]')
             data_odd=new_html.xpath('//tr[@class="odd"]')
             for i in data_even:
                 detail_data=i.xpath("./td/text()")
-                new_data.append([detail_data[0],detail_data[1],detail_data[4],detail_data[5],detail_data[10]])
+                new_data.append([detail_data[0], detail_data[1], detail_data[4], detail_data[5], detail_data[10]])
             for j in data_odd:
                 detail_data=j.xpath("./td/text()")
                 #分别对应的是IP PORT HIDE TYPE VALID TIME
-                new_data.append([detail_data[0],detail_data[1],detail_data[4],detail_data[5],detail_data[10]])
+                new_data.append([detail_data[0], detail_data[1], detail_data[4], detail_data[5], detail_data[10]])
             return new_data
         #如果加入了任何自己的代理可以在下面加入if判断
-        return
+        if 'zhandaye' in url:#这个很网站很特殊需要特别处理
+            print('正在爬取傻吊站大爷代理')
+            html = requests.get(url, headers=self.header_daye).text
+            new_html = etree.HTML(html)
+            new_data = []
+            ip_list=new_html.xpath('//*[@id="ipc"]/tbody/tr/td[1]')
+            row_code_list=new_html.xpath('//*[@id="ipc"]/tbody/tr/td[3]/img/@src')
+            full_code_list=list(map(lambda row_url: 'http://ip.zdaye.com'+row_url, row_code_list))
+            code_list_data=list(map(self.get_code, full_code_list))
+            type_list_data=new_html.xpath('//*[@id="ipc"]/tbody/tr/td[4]')
+            place_list_data=new_html.xpath('//*[@id="ipc"]/tbody/tr/td[5]')
+            ping_list_data=new_html.xpath('//*[@id="ipc"]/tbody/tr/td[19]')
+            for i in range(1,len(ip_list)):
+                new_data.append([ip_list[1],code_list_data[0],type_list_data[1],place_list_data[1],ping_list_data[0]])
 
-    def url_check_valid(self,row_url):
-        for proxy_name,proxy_url in row_url.iteritems():
-            if 'http' in row_url[proxy_name][0] and row_url[proxy_name][0][-1]=='/':
+            return new_data
+    #总结一下：虽然新增一个proxy需要定义一个if 很蠢但是由于每一个代理规则都不一 ，而自适应规则相当麻烦，等有能力在做吧。
+    def url_check_valid(self, row_url):
+        for proxy_name, proxy_url in row_url.iteritems():
+            if 'http' in row_url[proxy_name][0] and row_url[proxy_name][0][-1] == '/':
                 try:
                     self.get_source(row_url[proxy_name][0])
 
@@ -108,19 +135,29 @@ class proxy_spider(object):
         except Exception:
             return 'failed'
 
+    def insert_mysql_db(self, data):
+        #感觉这样做挺蠢的，不知道有没有状态继承 可以访问成功一次直接进行数据插入==
+        db = pymysql.connect(self.db_setting[0][1],self.db_setting[1][1],self.db_setting[2][1],self.db_setting[3][1],port=int(self.db_setting[4][1]),charset=self.db_setting[5][1])
+        #建立游标对象
+        cursor=db.cursor()
+        cursor.excute()
+        db.commit()
+        return
+
     def read_config(self):
         cfg = ConfigParser()
         cfg.read('config.ini')
         return cfg.items(cfg.sections()[0])
-
-    def get_code(self):
-        #这段代码仅供测试，还在调试中。
-        url = 'http://www.rongtudai.com/validimg.html'
+    #不用lock 唯一标示即可
+    def get_code(self, url):
+        # url = 'http://www.rongtudai.com/validimg.html'
         f=requests.get(url)
         print(f)
-        with open("code.jpg", "wb") as code:
+        name=url[-39:-19]
+        path='/codepic/'+name
+        with open(path, "wb") as code:
             code.write(f.content)
-        img = Image.open('code.jpg')
+        img = Image.open(path)
         img = img.convert("RGBA")
         pixdata = img.load()
         for y in range(img.size[1]):
@@ -135,29 +172,32 @@ class proxy_spider(object):
             for x in range(img.size[0]):
                 if pixdata[x, y][2] > 0:
                     pixdata[x, y] = (255, 255, 255, 255)
-        img.save('newcode.jpg')
-        img = Image.open('newcode.jpg')
+        img.save('/codepic/'+'newcode.gif')
+        img = Image.open('/codepic/'+'newcode.gif')
         vcode =image_to_string(img)
+        try:#r如果识别失败则默认为8080端口
+            int(vcode)
+        except:
+            vcode=8080
         return vcode
-    def isAlive(self,ip,port,header):
-        proxy={'http':'http://'+ip+':'+port,'https:':'https://'+ip+':'+port}
-        print(proxy)
 
+
+    def isAlive(self, ip, port, header):
+        proxy={'http': 'http://'+ip+':'+port, 'https:': 'https://'+ip+':'+port}
+        print(proxy)
         #使用这个方式是全局方法。
-        #使用代理访问腾讯官网，进行验证代理是否有效
-        test_url="http://www.songluyi.com"
-        req=requests.get(test_url,headers=header,proxy=proxy)
+        #使用代理访问百度网站，进行验证代理是否有效
+        test_url = "http://www.baidu.com"
         try:
             #timeout 设置为10，如果你不能忍受你的代理延时超过10，就修改timeout的数字
-            resp=urllib2.urlopen(req,timeout=10)
-
-            if resp.code==200:
+            req=requests.get(test_url, headers=header, proxies=proxy, timeout=10)
+            if req.status_code == 200:
                 print("work")
                 return True
             else:
                 print("not work")
                 return False
-        except :
+        except Exception :
             print("Not work")
             return False
 if __name__=='__main__':
