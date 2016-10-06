@@ -9,7 +9,6 @@ Contact:    slysly759@gmail.com
  
 -------------------------------------------------------------------------------
 """
-
 import requests
 import time,random
 from lxml import etree
@@ -17,13 +16,12 @@ import pymysql
 from configparser import ConfigParser
 from PIL import Image
 import multiprocessing
-# import pytesser3   #这个是我自己写的一个 已经上传pypi 大家可以下载来试一下
-try:
-    from pytesser import image_to_string
-except:
-    from pytesseract import image_to_string
-global check_flag
-check_flag=False
+from pytesser3 import image_to_string #这个是我自己写的一个 已经上传pypi 大家可以下载来试一下
+# try:
+#     from pytesser import image_to_string
+# except:
+#     from pytesseract import image_to_string
+
 class proxy_spider(object):
 
     def __init__(self):
@@ -33,6 +31,7 @@ class proxy_spider(object):
             '西刺代理':['http://www.xicidaili.com/nn/','http://www.xicidaili.com/nt/'],
             '站大爷':['http://ip.zdaye.com/?ip=&port=&adr=&checktime=&sleep=&cunhuo=&nport=&nadr=&dengji=&https=&yys=&gb=&post=&px=']#这个比较特殊
         }
+        self.check_flag=False
 
         self.db_setting=self.read_config()
         self.header_xici={"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -62,7 +61,7 @@ class proxy_spider(object):
     def form_url(self,row_url):
         new_list=[]
         for i in row_url:
-            url_list=list(map(lambda x: i+str(x), range(1, 5)))#频率先别那么高，容易被封，写出换代理IP的函数再说
+            url_list=list(map(lambda x: i+str(x), range(1, 6)))#频率先别那么高，容易被封，requests的换代理IP感觉不咋样
             new_list.extend(url_list)
         return new_list
 
@@ -71,12 +70,13 @@ class proxy_spider(object):
          cursor=db.cursor()
          cursor.execute("select IP,PORT from proxy_db")
          valid_list=cursor.fetchall()
+         print(valid_list)
          return valid_list
 
     def get_source(self,url):
         if 'kuaidaili'in url:
             print('正在爬取快代理的url:'+url)
-            if check_flag:
+            if self.check_flag:
                 proxy= self.need_porxy_crawl()
                 html= requests.get(url, headers=self.header_kuai, proxies=proxy, timeout=5).text
             else:
@@ -90,21 +90,34 @@ class proxy_spider(object):
                 new_data.append(change_data[i*8:(i+1)*8])
             return new_data
         if 'xicidaili' in url:#该网站对访问频率会进行检测超过则会block
-            print('正在爬取西刺代理的url:'+url)
-            html=requests.get(url, headers=self.header_xici).text
-            new_html=etree.HTML(html)
-            new_data=[]
-            data_even=new_html.xpath('//tr[@class=""]')
-            data_odd=new_html.xpath('//tr[@class="odd"]')
-            for i in data_even:
-                detail_data=i.xpath("./td/text()")
-                new_data.append([detail_data[0], detail_data[1],  detail_data[3], detail_data[4], None, None, detail_data[10],detail_data[5]])
-                new_data.append([detail_data[0], detail_data[1],  detail_data[3], detail_data[4], None, None, detail_data[10],detail_data[5]])
-            for j in data_odd:
-                detail_data=j.xpath("./td/text()")
-                #分别对应的是IP PORT HIDE CONNECTIONS WAY PLACE PING LIVE
-                new_data.append([detail_data[0], detail_data[1],detail_data[3],  detail_data[4],  None, None, detail_data[10],detail_data[5]])
-            return new_data
+            try:
+                print('正在爬取西刺代理的url:'+url)
+                try:
+                    html=requests.get(url, headers=self.header_xici,timeout=10).text
+                except:
+                    print('你的本机IP因为爬取过多被封掉，正在从代理池中随机寻找')
+                    self.check_flag=True
+                    proxy= self.need_porxy_crawl()
+                    try:
+                        html=requests.get(url,headers=self.header_xici,proxies=proxy).text
+                    except ConnectionError:
+                        raise ConnectionError
+
+                new_html=etree.HTML(html)
+                new_data=[]
+                data_even=new_html.xpath('//tr[@class=""]')
+                data_odd=new_html.xpath('//tr[@class="odd"]')
+                for i in data_even:
+                    detail_data=i.xpath("./td/text()")
+                    new_data.append([detail_data[0], detail_data[1],  detail_data[3], detail_data[4], None, None, detail_data[10],detail_data[5]])
+                    new_data.append([detail_data[0], detail_data[1],  detail_data[3], detail_data[4], None, None, detail_data[10],detail_data[5]])
+                for j in data_odd:
+                    detail_data=j.xpath("./td/text()")
+                    #分别对应的是IP PORT HIDE CONNECTIONS WAY PLACE PING LIVE
+                    new_data.append([detail_data[0], detail_data[1],detail_data[3],  detail_data[4],  None, None, detail_data[10],detail_data[5]])
+                return new_data
+            except:
+                pass
         #如果加入了任何自己的代理可以在下面加入if判断
     def fuck_zhandaye(self,url):
         #这个很网站很特殊需要特别处理
@@ -209,7 +222,7 @@ class proxy_spider(object):
             block_flag=True
         else:
             block_flag=False
-            proxy={'http': 'http://'+data[0]+':'+data[1], 'https:': 'https://'+data[0]+':'+data[1]}
+            proxy={'http': 'http://'+data[0]+':'+str(data[1]), 'https:': 'https://'+data[0]+':'+str(data[1])}
             print(proxy)
             #使用这个方式是全局方法。
             #使用代理访问百度网站，进行验证代理是否有效
@@ -230,11 +243,14 @@ class proxy_spider(object):
 
     def need_porxy_crawl(self):
         proxy_info=random.choice(fuck_proxy.get_valid_proxy_from_db())
-        proxy={'http': 'http://'+proxy_info[0]+':'+proxy_info[1], 'https:': 'https://'+proxy_info[0]+':'+proxy_info[1]}
+
+        proxy={'http': 'http://'+proxy_info[0]+':'+str(proxy_info[1]), 'https:': 'https://'+proxy_info[0]+':'+str(proxy_info[1])}
         return proxy
 
 if __name__=='__main__':
     while True:
+        global check_flag
+        check_flag=False
         fuck_proxy=proxy_spider()
         zhanye_data=[]
         pool_size=multiprocessing.cpu_count()*4
@@ -253,18 +269,12 @@ if __name__=='__main__':
         active_proxy=list(pool.map(fuck_proxy.isAlive,kuai_list))
         active_proxy.extend(list(pool.map(fuck_proxy.isAlive, huaci_list)))
         # zhandaye_url=fuck_proxy.row_url['站大爷'][0]
-        #
         # zhanye_data=fuck_proxy.fuck_zhandaye(zhandaye_url)
         # print(zhanye_data)
         pool.close()
         pool.join()
-        insert_db_data=list(filter(lambda x:x if x else False,active_proxy))
+        insert_db_data=list(filter(lambda x: x if x else False,active_proxy))
         print(insert_db_data)
         fuck_proxy.insert_mysql_db(insert_db_data)
         print('插入成功')
-
-
-
-
-
-
+        time.sleep(300)#自己用即可别太过分了。
