@@ -6,7 +6,7 @@
 ##项目内容
 1. **msg_pro 项目**，功能：定时发送天气消息 和笑话 到指定手机上
 
-![](http://www.songluyi.com/wp-content/uploads/2016/10/QQ图片20161006173357.png)
+![](http://www.songluyi.com/wp-content/uploads/2016/10/QQ图片20161006173357-e1475746767130.png)
 
 2. **ChangeHeaderToDict项目** 功能：web端将浏览器header转换为json格式 目前已经完成
 如图：
@@ -20,4 +20,5 @@ Python将各个网站获得的代理获取后，插入到VPS的mysql数据库上
 如果你希望有API，可以fork这个项目增加，目前校招中。。较忙~
 
 ##后续：
+
 1. **如果你有任何想法可以提交给我或者点击github issue 按钮**
