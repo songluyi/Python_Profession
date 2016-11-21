@@ -38,9 +38,36 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3443163" vertical-offset="0" max-vertical-offset="607">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6869852" vertical-offset="248" max-vertical-offset="855">
+              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cqs_index.py" pinned="false" current-in-tab="false">
+        <entry file="file://E:/CQS_LOAD_TOOL/bin/cqs_index.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3534" max-vertical-offset="4408">
+              <caret line="205" column="16" selection-start-line="205" selection-start-column="16" selection-end-line="205" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cqs_index_database.py" pinned="false" current-in-tab="false">
+        <entry file="file://E:/CQS_LOAD_TOOL/bin/cqs_index_database.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1577">
+              <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+              <folding>
+                <marker date="1472781288691" expanded="true" signature="748:797" placeholder="select max(i..CUX_CQS_INDEX_HIS_T..." />
+                <marker date="1472781288691" expanded="true" signature="1039:1088" placeholder="select max(b..CUX_CQS_INDEX_HIS_T..." />
+                <marker date="1472781288691" expanded="true" signature="1394:2030" placeholder="INSERT INTO ..." />
+                <marker date="1472781288691" expanded="true" signature="2057:2127" placeholder="insert into ..." />
+                <marker date="1472781288691" expanded="true" signature="2094:2127" placeholder="select * fro..cux_cqs_index_t..." />
+                <marker date="1472781288691" expanded="true" signature="2266:2320" placeholder="select max(b..CUX_CQS_BRANCH_CONNECT_T..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -320,7 +347,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1378" height="744" extended-state="1" />
+    <frame x="-8" y="0" width="1378" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -382,10 +409,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://E:/CQS_LOAD_TOOL/bin/cqs_index_database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1577">
+          <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+          <folding>
+            <marker date="1472781288691" expanded="true" signature="748:797" placeholder="select max(i..CUX_CQS_INDEX_HIS_T..." />
+            <marker date="1472781288691" expanded="true" signature="1039:1088" placeholder="select max(b..CUX_CQS_INDEX_HIS_T..." />
+            <marker date="1472781288691" expanded="true" signature="1394:2030" placeholder="INSERT INTO ..." />
+            <marker date="1472781288691" expanded="true" signature="2057:2127" placeholder="insert into ..." />
+            <marker date="1472781288691" expanded="true" signature="2094:2127" placeholder="select * fro..cux_cqs_index_t..." />
+            <marker date="1472781288691" expanded="true" signature="2266:2320" placeholder="select max(b..CUX_CQS_BRANCH_CONNECT_T..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://E:/CQS_LOAD_TOOL/bin/cqs_index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3534" max-vertical-offset="4408">
+          <caret line="205" column="16" selection-start-line="205" selection-start-column="16" selection-end-line="205" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3443163" vertical-offset="0" max-vertical-offset="607">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.6869852" vertical-offset="248" max-vertical-offset="855">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
           <folding />
         </state>
       </provider>
