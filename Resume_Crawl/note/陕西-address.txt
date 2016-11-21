@@ -1,0 +1,10 @@
+西安----xa
+咸阳----xianyang
+宝鸡----baoji
+渭南----wn
+汉中----hanzhong
+榆林----yl
+延安----yanan
+安康----ankang
+商洛----sl
+铜川----tc
